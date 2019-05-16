@@ -1,0 +1,11 @@
+{
+	"name": "PixelPlex base server",
+	"description": "PixelPlex base server",
+	"sampleUrl": "https://.............pixelplex-test.by",
+	"template": {
+		"forceLanguage": "en",
+		"withCompare": true,
+		"withGenerator": true
+	}
+}
+

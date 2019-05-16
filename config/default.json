@@ -1,0 +1,21 @@
+{
+	"env": "development",
+	"traceApiRequests": true,
+	"cors": false,
+	"db": {
+		"user": "",
+		"password": "",
+		"host": "127.0.0.1",
+		"port": "27017",
+		"database": "000-full-stack"
+	},
+	"logger": {
+		"level": "trace"
+	},
+	"port": 3000,
+	"raven": {
+		"enabled": false,
+		"config": ""
+	},
+	"sessionSecret": "KB}3S}QBh]"
+}

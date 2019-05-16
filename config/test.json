@@ -1,0 +1,13 @@
+{
+	"db": {
+		"user": "",
+		"password": "",
+		"host": "mongo",
+		"port": "",
+		"database": "name_database_test"
+	},
+	"logger": {
+		"level": "error"
+	},
+	"port": 3000
+}
