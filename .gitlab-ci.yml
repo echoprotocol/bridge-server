@@ -33,7 +33,7 @@ build.develop:
     NODE_APP_INSTANCE: develop
     APP_SESSION_SECRET: "APP_SESSION_SECRET"
     EXPORT_HOST_DB: 127.0.0.1
-    EXPORT_HOST_API: 127.0.0.1
+    EXPORT_HOST_API: 0.0.0.0
   script:
     - docker build -t 649.bridge.server.api . --no-cache
     - docker-compose down
@@ -53,7 +53,7 @@ build.master:
     NODE_APP_INSTANCE: master
     APP_SESSION_SECRET: "APP_SESSION_SECRET"
     EXPORT_HOST_DB: 127.0.0.1
-    EXPORT_HOST_API: 127.0.0.1
+    EXPORT_HOST_API: 0.0.0.0
   script:
     - docker build -t 649.bridge.server.api . --no-cache
     - docker-compose down
