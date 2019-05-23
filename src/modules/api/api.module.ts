@@ -7,16 +7,17 @@ import { initMiddleware } from './middleware';
 import RestError from '../../errors/rest.error';
 import FormError from '../../errors/form.error';
 import * as HTTP from '../../constants/http.constants';
-import RavenHelper from 'helpers/raven.helper';
 import { Response, Request } from 'express-serve-static-core';
 import { Action, Handler } from '../../types/api';
+import QRController from './controllers/qr.controller';
+import RavenService from '../../services/raven.service';
 
 const logger = getLogger('api.module');
 
 export default class ApiModule extends AbstractModule {
 	private app: express.Express;
 
-	constructor(readonly ravenHelper: RavenHelper) {
+	constructor(readonly qrController: QRController, readonly ravenService: RavenService) {
 		super();
 	}
 
@@ -29,7 +30,13 @@ export default class ApiModule extends AbstractModule {
 	}
 
 	initRoutes() {
-		// FIXME: move to constants ?
+		const controllers = [
+			this.qrController,
+		];
+		for (const controller of controllers) {
+			controller.initRoutes(this.addRoute.bind(this));
+		}
+
 		if (config.env === 'development') this.app.use('/apidoc', express.static('apidoc'));
 		this.addRoute(HTTP.METHOD.GET, '*', [
 			() => { throw new RestError(HTTP.CODE.METHOD_NOT_ALLOWED); },
@@ -39,32 +46,21 @@ export default class ApiModule extends AbstractModule {
 	addRoute(
 		method: HTTP.METHOD,
 		route: string,
-		// handlers: [Action, ...Handler[]],
 		[action, ...handlers]: [Action, ...Handler[]],
-		responseType = HTTP.RESPONSE_TYPE.JSON,
+		contentType = HTTP.CONTENT_TYPE.JSON,
 	) {
-		// TODO: check handlers length
 		this.app[method](route, async (req, res) => {
 			try {
 				req.form = { ...req.query, ...req.params, ...req.body };
 				this.traceRequest(req, req.form);
-				for (const handler of handlers) handler(req);
-				const result = await action({ req, form: req.form, user: req.user });
-				switch (responseType) {
-					case HTTP.RESPONSE_TYPE.JSON:
-						res.status(HTTP.CODE.OK).json({
-							result: result || null,
-							status: HTTP.CODE.OK,
-						});
-						break;
-					case HTTP.RESPONSE_TYPE.FILE:
-						res.send(result);
-						break;
-				}
+				handlers.forEach((handler) => handler(req));
+				const result: any = await action({ req, form: req.form });
+				res.setHeader('Content-Type', contentType);
+				res.status(HTTP.CODE.OK).send(result);
 			} catch (error) {
 				if (!(error instanceof RestError)) {
 					logger.error(error);
-					this.ravenHelper.error(error, 'api#handleRequest', { method, route, form: req.form });
+					this.ravenService.error(error, 'api#handleRequest', { method, route, form: req.form });
 					this.sendError(res, new RestError(HTTP.CODE.INTERNAL_SERVER_ERROR));
 				} else this.sendError(res, error);
 			}
@@ -81,11 +77,6 @@ export default class ApiModule extends AbstractModule {
 	private traceRequest(req: Request, form: Express.Request['form']) {
 		if (!config.traceApiRequests) return;
 		form = { ...form };
-		['password'].forEach((key) => {
-			if (!form[key]) return;
-			// tslint:disable-next-line:prefer-array-literal
-			form[key] = new Array(form[key].length).fill('*').join('');
-		});
 		logger.trace(`${req.method.toUpperCase()} Request ${req.originalUrl}`, JSON.stringify(form));
 	}
 

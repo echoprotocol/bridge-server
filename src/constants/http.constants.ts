@@ -1,9 +1,6 @@
-// update CODE and DEFAULT_MESSAGE if u need code not presented below
-// FIXME: use const enums ?
-
-export enum RESPONSE_TYPE {
-	JSON = 'json',
-	FILE = 'file',
+export enum CONTENT_TYPE {
+	JSON = 'application/json',
+	PNG = 'image/png',
 }
 
 export enum METHOD {

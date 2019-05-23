@@ -2,13 +2,6 @@
 	"env": "development",
 	"traceApiRequests": true,
 	"cors": false,
-	"db": {
-		"user": "",
-		"password": "",
-		"host": "127.0.0.1",
-		"port": "27017",
-		"database": "649_bridge_server"
-	},
 	"logger": {
 		"level": "trace"
 	},

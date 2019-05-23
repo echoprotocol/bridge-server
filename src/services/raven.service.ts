@@ -2,11 +2,11 @@ import * as config from 'config';
 import { getLogger } from 'log4js';
 import * as Raven from 'raven';
 import { promisify } from 'util';
-import AbstractInitableHelper from './abstract.initable.helper';
+import AbstractInitableHelper from './abstract.initable.services';
 
 const logger = getLogger('raven.helper');
 
-export default class RavenHelper extends AbstractInitableHelper {
+export default class RavenService extends AbstractInitableHelper {
 	private installed = false;
 
 	async init() {

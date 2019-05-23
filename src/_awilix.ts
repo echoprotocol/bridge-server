@@ -1,10 +1,10 @@
 import { asClass, asValue, createContainer, InjectionMode, Lifetime, listModules } from 'awilix';
 import * as config from 'config';
 import { getLogger } from 'log4js';
-import { ERROR } from './errors/startup.error';
-import AbstractInitableHelper from './helpers/abstract.initable.helper';
 import AbstractModule from './modules/abstract.module';
+import AbstractInitableServices from './services/abstract.initable.services';
 import { dotsCaseToCamelCase } from './utils/common';
+import { ERROR } from './errors/startup.error';
 
 const logger = getLogger('awilix');
 
@@ -42,13 +42,13 @@ export async function initModule(name: string) {
 	await module.init();
 }
 
-export async function initInitableHelpers() {
-	const helpers = listModules('helpers/!(abstract)*.js');
-	await Promise.all(helpers.map(async ({ name }) => {
+export async function initInitableServices() {
+	const services = listModules('services/!(abstract)*.js');
+	await Promise.all(services.map(async ({ name }) => {
 		try {
-			logger.trace(`${name} initializing`);
-			const helper = container.resolve<Object | AbstractInitableHelper>(dotsCaseToCamelCase(name));
-			if (helper instanceof AbstractInitableHelper) await helper.init();
+			logger.trace(`${name.replace('.', ' ')} initializing`);
+			const service = container.resolve<Object | AbstractInitableServices>(dotsCaseToCamelCase(name));
+			if (service instanceof AbstractInitableServices) await service.init();
 		} catch (error) {
 			logger.error(ERROR.CONNECTION_ERROR);
 			throw error;
