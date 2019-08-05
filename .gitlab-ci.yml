@@ -36,7 +36,6 @@ build.master:
     - docker-compose -p bridge-master up -d
   only:
     - master
-    - ECHO-1113
   tags:
     - bridge-dev
   environment:
