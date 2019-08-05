@@ -1,26 +1,5 @@
 stages:
-  - test
   - build
-
-
-test:
-  image: node:10.15-alpine
-  stage: test
-  variables:
-    NODE_ENV: test
-  cache:
-    key: $CI_COMMIT_REF_NAME
-    paths:
-      - node_modules
-  script:
-    - npm i
-    - npm run lint
-  tags:
-    - docker
-  only:
-    - merge_requests
-    - develop
-    - master
 
 
 build.develop:
@@ -35,25 +14,26 @@ build.develop:
     - docker-compose -p bridge-develop up -d
   only:
     - develop
+    - ECHO-1113
   tags:
-    - pp-develop
+    - bridge-dev
   environment:
     name: develop
 
 
 build.master:
   stage: build
+  before_script:
+    - CI_FULL_REGISTRY=bridge-server:master
   variables:
     NODE_ENV: production
     NODE_APP_INSTANCE: master
-    EXPORT_HOST_DB: 127.0.0.1
   script:
-    - docker build -t 649.bridge.server.api . --no-cache
-    - docker-compose down
-    - docker-compose up -d
+    - docker build --cache-from $CI_FULL_REGISTRY -t $CI_FULL_REGISTRY .
+    - docker-compose -p bridge-master up -d
   only:
     - master
   tags:
-    - pp-stage
+    - bridge-dev
   environment:
-    name: master
+    name: stage
