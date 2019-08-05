@@ -27,6 +27,7 @@ npm run dev:api
 You can also start the project with docker or docker-compose.
 
 ```bash
+export PORT=3001
 export CI_FULL_REGISTRY=bridge-backend:develop
 docker build --cache-from $CI_FULL_REGISTRY -t $CI_FULL_REGISTRY .
 docker-compose up

@@ -8,5 +8,5 @@ services:
       - NODE_ENV=production
       - NODE_APP_INSTANCE=$NODE_APP_INSTANCE
     ports:
-      - 127.0.0.1:26493:3000
+      - 127.0.0.1:${PORT}:3000
     restart: always

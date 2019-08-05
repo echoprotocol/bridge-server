@@ -9,6 +9,7 @@ build.develop:
   variables:
     NODE_ENV: production
     NODE_APP_INSTANCE: develop
+    PORT: 36490
   script:
     - docker build --cache-from $CI_FULL_REGISTRY -t $CI_FULL_REGISTRY .
     - docker-compose -p bridge-develop up -d
@@ -28,6 +29,7 @@ build.master:
   variables:
     NODE_ENV: production
     NODE_APP_INSTANCE: master
+    PORT: 26490
   script:
     - docker build --cache-from $CI_FULL_REGISTRY -t $CI_FULL_REGISTRY .
     - docker-compose -p bridge-master up -d
