@@ -17,7 +17,8 @@
 		"lint": "npm run lint:src && npm run lint:typing && npm run lint:types && npm run build",
 		"lint:src": "npx tslint -p tsconfig.json -c tslint.json",
 		"lint:typing": "npx tslint -c tslint.json ./typing/**/*.d.ts",
-		"lint:types": "npx tslint -c tslint.json ./src/types/**/*.d.ts"
+		"lint:types": "npx tslint -c tslint.json ./src/types/**/*.d.ts",
+		"test": "echo \"tests should be developed\""
 	},
 	"dependencies": {
 		"awilix": "^4.2.0",

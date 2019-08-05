@@ -1,0 +1,22 @@
+language: node_js
+node_js:
+  - "10"
+
+stages:
+  - lint
+  - test
+  - build
+
+jobs:
+  include:
+
+    - stage: lint
+      name: "Lint"
+      if: type = push
+      script:
+        - npm run lint
+
+    - stage: test
+      name: "Tests"
+      if: branch IN (develop, master) AND type = pull_request
+      script: npm run test
