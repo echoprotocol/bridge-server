@@ -2,21 +2,17 @@ stages:
   - test
   - build
 
+
 test:
   image: node:10.15-alpine
   stage: test
   variables:
     NODE_ENV: test
-    DATABASE_TEST_URL: "mongodb://mongo/dbname"
-  services:
-    - mongo
   cache:
     key: $CI_COMMIT_REF_NAME
     paths:
       - node_modules
   script:
-    - apk --no-cache add make gcc g++ python git
-    - npm config set unsafe-perm true
     - npm i
     - npm run lint
   tags:
@@ -26,18 +22,17 @@ test:
     - develop
     - master
 
+
 build.develop:
   stage: build
+  before_script:
+    - CI_FULL_REGISTRY=bridge-server:develop
   variables:
     NODE_ENV: production
     NODE_APP_INSTANCE: develop
-    APP_SESSION_SECRET: "APP_SESSION_SECRET"
-    EXPORT_HOST_DB: 127.0.0.1
-    EXPORT_HOST_API: 0.0.0.0
   script:
-    - docker build -t 649.bridge.server.api . --no-cache
-    - docker-compose down
-    - docker-compose up -d
+    - docker build --cache-from $CI_FULL_REGISTRY -t $CI_FULL_REGISTRY .
+    - docker-compose -p bridge-develop up -d
   only:
     - develop
   tags:
@@ -51,9 +46,7 @@ build.master:
   variables:
     NODE_ENV: production
     NODE_APP_INSTANCE: master
-    APP_SESSION_SECRET: "APP_SESSION_SECRET"
     EXPORT_HOST_DB: 127.0.0.1
-    EXPORT_HOST_API: 0.0.0.0
   script:
     - docker build -t 649.bridge.server.api . --no-cache
     - docker-compose down

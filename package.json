@@ -1,8 +1,13 @@
 {
-	"name": "pixelplex-base-server",
+	"name": "echo-bridge-backend",
+	"description": "Echo Bridge QR-code generator",
 	"version": "0.1.0",
-	"homepage": "https://gitlab.pixelplex.by/649_bridge/server",
-	"license": "UNLICENSED",
+	"homepage": "https://github.com/echoprotocol/bridge-server",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/echoprotocol/bridge-server.git"
+	},
 	"private": true,
 	"scripts": {
 		"build": "rm -rf ./dist && npx tsc",
