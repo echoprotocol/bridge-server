@@ -1,8 +1,13 @@
 {
-	"name": "pixelplex-base-server",
+	"name": "echo-bridge-backend",
+	"description": "Echo Bridge QR-code generator",
 	"version": "0.1.0",
-	"homepage": "https://gitlab.pixelplex.by/649_bridge/server",
-	"license": "UNLICENSED",
+	"homepage": "https://github.com/echoprotocol/bridge-server",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/echoprotocol/bridge-server.git"
+	},
 	"private": true,
 	"scripts": {
 		"build": "rm -rf ./dist && npx tsc",
@@ -12,7 +17,8 @@
 		"lint": "npm run lint:src && npm run lint:typing && npm run lint:types && npm run build",
 		"lint:src": "npx tslint -p tsconfig.json -c tslint.json",
 		"lint:typing": "npx tslint -c tslint.json ./typing/**/*.d.ts",
-		"lint:types": "npx tslint -c tslint.json ./src/types/**/*.d.ts"
+		"lint:types": "npx tslint -c tslint.json ./src/types/**/*.d.ts",
+		"test": "echo \"tests should be developed\""
 	},
 	"dependencies": {
 		"awilix": "^4.2.0",
