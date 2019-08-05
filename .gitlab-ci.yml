@@ -7,6 +7,7 @@ build.develop:
   before_script:
     - CI_FULL_REGISTRY=bridge-server:develop
   variables:
+    CI_FULL_REGISTRY: ""
     NODE_ENV: production
     NODE_APP_INSTANCE: develop
     PORT: 36490
@@ -27,6 +28,7 @@ build.master:
   before_script:
     - CI_FULL_REGISTRY=bridge-server:master
   variables:
+    CI_FULL_REGISTRY: ""
     NODE_ENV: production
     NODE_APP_INSTANCE: master
     PORT: 26490
