@@ -22,7 +22,7 @@ function initCors(app: express.Express) {
 	app.use(cors({
 		origin: (_, cb) => cb(null, true),
 		credentials: true,
-		methods: Object.values(HTTP.CODE),
+		methods: Object.values(HTTP.METHOD),
 		allowedHeaders: ['x-user', 'X-Signature', 'accept', 'content-type'],
 	}));
 }
