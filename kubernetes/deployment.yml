@@ -3,6 +3,9 @@ kind: Deployment
 metadata:
   name: bridge-server
 spec:
+  selector:
+    matchLabels:
+      app: bridge
   replicas: 2
   minReadySeconds: 15
   strategy:
