@@ -1,18 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bridge-server
+  name: bridge
 spec:
   selector:
     matchLabels:
       app: bridge
-  replicas: 2
-  minReadySeconds: 15
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 1
-      maxSurge: 1
+  replicas: 1
   template:
     metadata:
       labels:
@@ -21,7 +15,7 @@ spec:
       containers:
         - image: echoprotocol/bridge-server:latest
           imagePullPolicy: Always
-          name: bridge-server
+          name: bridge
           env:
             - name: NODE_ENV
               value: production
@@ -35,12 +29,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: dridge-lb
+  name: bridge
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
-  - port: 26490
-    protocol: TCP
+  - port: 3000
     targetPort: 3000
   selector:
     app: bridge
