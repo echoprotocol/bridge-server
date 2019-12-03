@@ -1,8 +1,10 @@
 name: Deploy
+
 on:
-  push:
-    branches:
-    - master
+  create:
+    tags:
+       - '*'
+
 jobs:
   deploy:
     name: deploy to cluster
