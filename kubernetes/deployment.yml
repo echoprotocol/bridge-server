@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bridge
+spec:
+  selector:
+    matchLabels:
+      app: bridge
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: bridge
+    spec:
+      containers:
+        - image: echoprotocol/bridge-server:latest
+          imagePullPolicy: Always
+          name: bridge
+          env:
+            - name: NODE_ENV
+              value: production
+            - name: NODE_APP_INSTANCE
+              value: production
+          ports:
+            - containerPort: 3000
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: bridge
+spec:
+  type: ClusterIP
+  ports:
+  - port: 3000
+    targetPort: 3000
+  selector:
+    app: bridge

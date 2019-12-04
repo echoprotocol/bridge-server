@@ -1,0 +1,34 @@
+name: Deploy
+
+on:
+  create:
+    tags:
+       - '*'
+
+jobs:
+  deploy:
+    name: deploy to cluster
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v1
+    - name: test
+      run: |
+        TAG=`echo $GITHUB_REF| sed 's/\//\ /g' | awk '{print $3}'`
+        sed -i  "s|latest|"$TAG"|g" kubernetes/deployment.yml
+    - name: Publish to Registry
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: echoprotocol/bridge-server
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        tag_names: true
+    - name: Save DigitalOcean kubeconfig
+      uses: digitalocean/action-doctl@master
+      env:
+        DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      with:
+        args: kubernetes cluster kubeconfig show bridge > $GITHUB_WORKSPACE/.kubeconfig
+    - name: deploy
+      run: |
+        export KUBECONFIG=.kubeconfig
+        kubectl apply -f ./kubernetes/deployment.yml
