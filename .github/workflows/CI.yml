@@ -11,12 +11,17 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v1
+    - name: test
+      run: |
+        TAG=`echo $GITHUB_REF| sed 's/\//\ /g' | awk '{print $3}'`
+        sed -i  "s|latest|"$TAG"|g" kubernetes/deployment.yml
     - name: Publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
         name: echoprotocol/bridge-server:latest
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
+        tag_names: true
     - name: Save DigitalOcean kubeconfig
       uses: digitalocean/action-doctl@master
       env:
