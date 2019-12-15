@@ -3,10 +3,7 @@ name: Deploy
 on:
   push:
     branches:
-    - master
-  create:
-    tags:
-       - '*'
+      - refs/tags/*
 
 jobs:
   deploy:
